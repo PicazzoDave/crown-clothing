@@ -3,60 +3,60 @@ import { useState } from 'react';
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
 
-import { 
-    createAuthUserWithEmailAndPassword, 
-    createUserDocumentFromAuth 
+import  {
+    signInWithGooglePopup, 
+    createUserDocumentFromAuth,
+    signInAuthUserWithEmailAndPassword, 
 } from '../../utils/firebase.utils';
 
-import './sign-up-form.syles.scss';
+import './sign-in-form.syles.scss';
 
 //default form values to initialize object
 const defaultFormFields = {
-    displayName: '',
     email: '',
     password: '',
-    confirmPassword: '',
 };
 
-const SignUpForm = () => {
+const SignInForm = () => {
 
     //Pass Use State default form value object
     const [formFields, setFormFields] = useState(defaultFormFields);
     //Destructure four values to use as constants within component
-    const { displayName, email, password, confirmPassword } = formFields; 
+    const { email, password } = formFields; 
 
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
-    }
+    };
+
+    const signInWithGoogle = async () => {
+        const { user } = await signInWithGooglePopup();
+        await createUserDocumentFromAuth(user);
+    };
 
     //Triggers onSubmit event handler
     const handleSubmit = async (event) => {
         event.preventDefault(); 
 
-        // Confirm password match
-        if(password !== confirmPassword) {
-            alert("passwords do not match");
-            return;
-        }
-
-        // Create user object following authentication
+        // Generate auth id following successful authentication
         try {
-            const { user } = await createAuthUserWithEmailAndPassword(
-                email, 
-                password
-            );
-            
-            // Include display name to user information
-            await createUserDocumentFromAuth(user, { displayName });
 
+            //Generate response when user successfully signs in
+            const response = await signInAuthUserWithEmailAndPassword(email,password);
+            console.log(response);
+            
             // Return form to default values following user creation
             resetFormFields();
        
         } catch(error) {
-            if(error.code ==='auth/email-a;ready-in-use') {
-                alert('Cannot create user, email already in use')
-            } else {
-                console.log('user creation encountered an error', error);
+            switch (error.code) {
+                case 'auth/wrong-password':
+                    alert('incorrect password for email');
+                    break;
+                case 'auth/user-not-found':
+                    alert('no user associated with this email');
+                    break;
+                default:
+                    console.log(error);
             }
         }
     }
@@ -73,16 +73,9 @@ const SignUpForm = () => {
 
     return (
         <div className='sign-up-container'>
-            <h2>Don't have an account?</h2>
-            <span>Sign up with your email and password</span>
+            <h2>Already have an account?</h2>
+            <span>Sign in with your email and password</span>
             <form onSubmit={ handleSubmit }>
-                <FormInput
-                    label='Display Name'
-                    type='text' 
-                    required onChange={ handleChange } 
-                    name='displayName' 
-                    value={ displayName } 
-                />
                 
                 <FormInput
                     label='Email'
@@ -101,20 +94,13 @@ const SignUpForm = () => {
                     name='password' 
                     alue={ password } 
                 />
-                
-                <FormInput
-                    label='Confirm Password'
-                    type='password' 
-                    required 
-                    onChange={ handleChange } 
-                    name='confirmPassword' 
-                    value={ confirmPassword } 
-                />
-
-                <Button buttonType='default' type='submit'>Sign Up</Button>
+                <div className='buttons-container'>
+                    <Button buttonType='default' type='submit'>Sign In</Button>
+                    <Button buttonType= 'google' type='button' onClick={signInWithGoogle}>Google Sign In</Button>
+                </div>
             </form>
         </div>
     );
 }
 
-export default SignUpForm; 
+export default SignInForm; 
