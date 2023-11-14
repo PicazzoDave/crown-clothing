@@ -23,8 +23,8 @@ const SignUpForm = () => {
     //Pass Use State default form value object
     const [formFields, setFormFields] = useState(defaultFormFields);
     //Destructure four values to use as constants within component
-    const { displayName, email, password, confirmPassword } = formFields; 
-
+    const { displayName, email, password, confirmPassword } = formFields;
+   
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
     }

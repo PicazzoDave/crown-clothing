@@ -29,8 +29,7 @@ const SignInForm = () => {
     };
 
     const signInWithGoogle = async () => {
-        const { user } = await signInWithGooglePopup();
-        await createUserDocumentFromAuth(user);
+        await signInWithGooglePopup();
     };
 
     //Triggers onSubmit event handler
@@ -41,8 +40,10 @@ const SignInForm = () => {
         try {
 
             //Generate response when user successfully signs in
-            const response = await signInAuthUserWithEmailAndPassword(email,password);
-            console.log(response);
+            const { user } = await signInAuthUserWithEmailAndPassword(
+                email,
+                password,
+            );
             
             // Return form to default values following user creation
             resetFormFields();
@@ -52,7 +53,7 @@ const SignInForm = () => {
                 case 'auth/wrong-password':
                     alert('incorrect password for email');
                     break;
-                case 'auth/user-not-found':
+                case 'auth/invalid':
                     alert('no user associated with this email');
                     break;
                 default:
