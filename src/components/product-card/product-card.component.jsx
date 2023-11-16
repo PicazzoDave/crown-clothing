@@ -1,3 +1,5 @@
+import CartContext from '../../context/cart.context';
+
 import './product-card.scss';
 
 import Button from '../button/button.component';
