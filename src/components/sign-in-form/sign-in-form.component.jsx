@@ -4,12 +4,11 @@ import FormInput from '../form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
 
 import  {
-    signInWithGooglePopup, 
-    createUserDocumentFromAuth,
+    signInWithGooglePopup,
     signInAuthUserWithEmailAndPassword, 
-} from '../../utils/firebase.utils';
+} from '../../utils/firebase/firebase.utils';
 
-import { SignInContainer, SignInHeadline, ButtonsContainer } from './sign-in-form.styles';
+import { SignInContainer, ButtonsContainer } from './sign-in-form.styles';
 
 //default form values to initialize object
 const defaultFormFields = {
@@ -40,10 +39,7 @@ const SignInForm = () => {
         try {
 
             //Generate response when user successfully signs in
-            const { user } = await signInAuthUserWithEmailAndPassword(
-                email,
-                password,
-            );
+            await signInAuthUserWithEmailAndPassword(email,password,);
             
             // Return form to default values following user creation
             resetFormFields();
@@ -74,7 +70,7 @@ const SignInForm = () => {
 
     return (
         <SignInContainer>
-            <SignInHeadline>Already have an account?</SignInHeadline>
+            <h2>Already have an account?</h2>
             <span>Sign in with your email and password</span>
             <form onSubmit={ handleSubmit }>
                 
@@ -93,7 +89,7 @@ const SignInForm = () => {
                     required 
                     onChange={ handleChange } 
                     name='password' 
-                    alue={ password } 
+                    value={ password } 
                 />
                 <ButtonsContainer>
                     <Button buttonType={BUTTON_TYPE_CLASSES.base} type='submit'>Sign In</Button>
@@ -104,4 +100,4 @@ const SignInForm = () => {
     );
 }
 
-export default SignInForm; 
+export default SignInForm;

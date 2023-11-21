@@ -8,7 +8,7 @@ import { UserContext } from '../../context/user.context';
 import { CartContext } from '../../context/cart.context';
 
 import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
-import { signOutUser } from '../../utils/firebase.utils';
+import { signOutUser } from '../../utils/firebase/firebase.utils.js';
 
 import { NavigationContainer, NavLinks, NavLink, LogoContainer } from './navigation.styles.jsx';
 
