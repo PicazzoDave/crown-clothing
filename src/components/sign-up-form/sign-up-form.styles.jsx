@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 export const SignUpContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 380px;
-`;
+  display: flex;
+  flex-direction: column;
+  width: 380px;
 
-export const SignUpHeadline = styled.h2`
+  h2 {
     margin: 10px 0;
+  }
 `;
